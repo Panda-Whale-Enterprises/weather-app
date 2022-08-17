@@ -1,9 +1,13 @@
+import axios from "axios";
 import React from "react";
 import { FunnelChart } from "recharts";
 
 
 
+
 const LocalWeather = props => {
+
+
 
 const getWeather = () => {
 
@@ -18,10 +22,23 @@ const getWeather = () => {
         let longitude = position.coords.longitude; 
         let url =  `${api}?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=imperial`; 
         
-        console.log('position ', position);
-        console.log('latitude: ', latitude);
-        console.log('longitude: ', longitude); 
-        console.log('url: ', url)
+        fetch(url)
+        .then(res => res.json())
+        .then(data => {
+
+            let location = document.getElementById("location") 
+            let temperature = document.querySelector('#temperature'); 
+            let description = document.querySelector('#description')
+
+            let temp = data.main.temp;
+            temperature.innerHTML = temp + "° F";
+            location.innerHTML = data.name; 
+            description.innerHTML = data.weather[0].main;
+        })
+        // console.log('position ', position);
+        // console.log('latitude: ', latitude);
+        // console.log('longitude: ', longitude); 
+        // console.log('url: ', url)
     }; 
 
     function error(){console.log('error finding location')}
@@ -34,9 +51,9 @@ getWeather()
 
     return(
     <div className="localWeather">
-        <h3>CurrentLocation</h3>
-        <h4>Location</h4>
-        <h4>Temp</h4>
+        <h3 id="location">Location</h3>
+        <h4 id='temperature'>Temp</h4>
+        <h4 id='description'>Description</h4>
 
     </div>
     )
