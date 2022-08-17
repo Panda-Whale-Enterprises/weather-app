@@ -35,7 +35,7 @@ const Login = (props) => {
             console.log('who logged in? ',res.data.user.username)
             //navigate(`${res.data.path}`, {replace:true})
             setIsSubmitted(res.data.loggedIn)
-            setWhoLogged(res.data.user.username.toUpperCase());
+            setWhoLogged(res.data.user.username);
             props.setUser(res.data.user.username);
         });
     }

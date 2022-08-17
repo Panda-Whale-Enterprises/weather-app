@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 require("dotenv").config();
 
-mongoose.connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0.txufs6f.mongodb.net/?retryWrites=true&w=majority`, {
+const connectToDB = () => {
+  mongoose.connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0.txufs6f.mongodb.net/?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     dbName: 'weatherApp'
 })
     .then(() => console.log('Connected to Mongo DB.'))
     .catch(err => console.log(err));
-
-
+}
 
 // FIX: unique should be true in prod
 const LocationSchema = new Schema({
@@ -35,6 +35,4 @@ const userSchema = new Schema({
 
 const User = mongoose.model('User', userSchema);
 
-
-
-module.exports = {Location, Session, User }
+module.exports = { connectToDB, Location, Session, User }

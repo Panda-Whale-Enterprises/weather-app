@@ -5,6 +5,9 @@ const axios = require('axios');
 const coreJsCompat = require('@babel/preset-env/data/core-js-compat');
 const Controller = require('./controllers/controller');
 
+// Connects to database
+require('./model').connectToDB();
+
 const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
@@ -19,8 +22,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-
-
 
 // mongoose.connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0.txufs6f.mongodb.net/?retryWrites=true&w=majority`, {
 //     useNewUrlParser: true,
