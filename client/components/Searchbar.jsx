@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CardContainer from './CardContainer.jsx';
+import { LineChart } from 'recharts';
 
 const Searchbar = props => {
 
@@ -57,6 +58,9 @@ const Searchbar = props => {
 
   return (
     <div className="searchbar-div">
+       
+      
+
       <form className="searchbar" onSubmit={handleSubmit}>
         <input className="search-input" name="search-input" id="search-input" type="text" placeholder="London" required></input>
         <input className="search-btn" type="submit" value="Search"></input>
