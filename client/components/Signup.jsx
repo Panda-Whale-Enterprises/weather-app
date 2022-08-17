@@ -22,7 +22,9 @@ const Signup = (props) => {
             data: {username, password} 
         })
         .then(navigate('/', {replace:true}))
+        props.setUser(username);
     }
+    
     return(
         <div className="signup-div">
             <form className="signup-form" onSubmit={handleSubmit}>

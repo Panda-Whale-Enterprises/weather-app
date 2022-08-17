@@ -3,6 +3,10 @@ const path = require('path');
 const express = require('express');
 const axios = require('axios');
 const coreJsCompat = require('@babel/preset-env/data/core-js-compat');
+
+// Connects to database
+require('./model').connectToDB();
+
 const controller = require('./controllers/controller');
 
 const cors = require('cors');
@@ -19,8 +23,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-
-
 
 // mongoose.connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0.txufs6f.mongodb.net/?retryWrites=true&w=majority`, {
 //     useNewUrlParser: true,
