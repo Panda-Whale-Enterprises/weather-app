@@ -46,6 +46,17 @@ body{
     padding:2rem;
 }
 
+.localWeather{
+    padding: 1rem;
+    width: 10rem;
+    height: 10rem;
+    margin: 2rem;
+    
+    border:1px solid $zinc-600;
+    border-radius:0.5rem;
+    background-color:$sky-50;
+}
+
 .searchbar {
     background-color: $sky-100;
     display: flex; 
