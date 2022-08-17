@@ -3,15 +3,15 @@ const path = require('path');
 const express = require('express');
 const axios = require('axios');
 const coreJsCompat = require('@babel/preset-env/data/core-js-compat');
-const Controller = require('./controller');
-require("dotenv").config();
+const controller = require('./controllers/controller');
+
 const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const userController = require('./userController');
-const cookieController = require('./cookieController');
-const sessionController = require('./sessionController');
+const userController = require('./controllers/userController');
+const cookieController = require('./controllers/cookieController');
+const sessionController = require('./controllers/sessionController');
 
 const PORT = 3000;
 
@@ -22,13 +22,13 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-mongoose.connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0.txufs6f.mongodb.net/?retryWrites=true&w=majority`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: 'weatherApp'
-})
-    .then(() => console.log('Connected to Mongo DB.'))
-    .catch(err => console.log(err));
+// mongoose.connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0.txufs6f.mongodb.net/?retryWrites=true&w=majority`, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     dbName: 'weatherApp'
+// })
+//     .then(() => console.log('Connected to Mongo DB.'))
+//     .catch(err => console.log(err));
 
 app.get('/', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../index.html'))
@@ -39,8 +39,14 @@ app.use('/', router);
 
 // Get monthly weather data for a city
 // http://localhost:3000/search
-router.post('/search', Controller.getMonthlyData, Controller.getData, (req, res, next) => {
-    // sends info back in via middleware getData
+router.post('/search', 
+  controller.getData, 
+  controller.getCoordinates, 
+  controller.getStations, 
+  controller.getMonthlyData, 
+  controller.saveData,
+  (req, res, next) => {
+      res.status(200).send({cityName: res.locals.cityName, cityData: res.locals.cityData});
 });
 
 
@@ -73,9 +79,15 @@ app.use('*', (req, res) => {
 
 //Global Error Handler
 app.use((err, req, res, next) => {
-    console.log(err);
-    res.status(500).send({ error: err });
-});
+    const defaultErr = {
+      log: 'Express error handler caught unknown middleware error',
+      status: 500,
+      message: { err: 'An error occurred' },
+    };
+    const errorObj = Object.assign({}, defaultErr, err);
+    console.log(errorObj.log);
+    res.status(errorObj.status).json(errorObj.message.err);
+  });
 
 
 app.listen(PORT, () => {
