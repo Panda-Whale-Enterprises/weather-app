@@ -8,13 +8,11 @@ const Login = (props) => {
 
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [whoLogged, setWhoLogged] = useState()
-    const userReset = props.setUser;
-    const userProfile = props.user;
+    const [whoLogged, setWhoLogged] = useState();
 
     useEffect(()=>{
 
-    },[isSubmitted, whoLogged, userProfile])
+    },[isSubmitted, whoLogged, props.user])
 
     const handleSubmit = (e) => {
 
@@ -29,7 +27,7 @@ const Login = (props) => {
         axios({
             method: 'POST', 
             url: 'http://localhost:3000/login', 
-            data: { username, password}
+            data: { username, password }
         })
          .then((res) => {
             console.log('Login.jsx .then res.data: ',res.data);
@@ -38,12 +36,7 @@ const Login = (props) => {
             //navigate(`${res.data.path}`, {replace:true})
             setIsSubmitted(res.data.loggedIn)
             setWhoLogged(res.data.user.username.toUpperCase());
-            userReset(prev => {
-                console.log(prev)
-                console.log(res.data.user)
-                return res.data.user.username.toUpperCase();
-            })
-            console.log('Finished Logging in');
+            props.setUser(res.data.user.username);
         });
     }
 
@@ -59,7 +52,7 @@ const Login = (props) => {
 
     return(
         <div className="login-div">
-            {isSubmitted ? <div className="login-success"><h3>Successfully logged in!</h3><h3>Welcome {userProfile}!</h3><Link to='/' id="enter-link">Click Here</Link></div> : renderForm}
+            {isSubmitted ? <div className="login-success"><h3>Successfully logged in!</h3><h3>Welcome {props.user}!</h3><Link to='/' id="enter-link">Click Here</Link></div> : renderForm}
         </div>
     )
 }

@@ -11,7 +11,7 @@ import { Routes, Route } from "react-router-dom";
 
 const App = props => {
 
-  const [user, setUser] = useState('user');
+  const [user, setUser] = useState(null);
 
     return (
       <Routes>
