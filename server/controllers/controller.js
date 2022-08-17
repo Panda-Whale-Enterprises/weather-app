@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { Location } = require('../model.js')
+require('dotenv').config();
 
 const controller = {};
 
@@ -30,7 +31,7 @@ controller.getData = (req, res, next) => {
 controller.getCoordinates = (req, res, next) => {
   const cityName = req.body.city;
   res.locals.cityName = cityName;
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${cityName}&key=AIzaSyBtfcxOznbnQFJHSdQTgsSZVRbvpOZNdKU`;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${cityName}&key=${process.env.GOOGLEAPIKEY}`;
     // Get coordinates from city name
   axios.get(url)
     .then(response => {
@@ -58,7 +59,7 @@ controller.getStations = (req, res, next) => {
     url: 'https://meteostat.p.rapidapi.com/stations/nearby',
     params: res.locals.coordinates, 
     headers: {
-      'X-RapidAPI-Key': 'ca2594298amsh94fb12fd4497783p1553c7jsn3ff6ba05d679',
+      'X-RapidAPI-Key': `${process.env.METEOSTATKEY}`,
       'X-RapidAPI-Host': 'meteostat.p.rapidapi.com'
     }
   };
