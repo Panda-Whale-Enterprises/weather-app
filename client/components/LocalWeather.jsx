@@ -26,14 +26,16 @@ const getWeather = () => {
         .then(res => res.json())
         .then(data => {
 
+
             let location = document.getElementById("location") 
             let temperature = document.querySelector('#temperature'); 
             let description = document.querySelector('#description')
-
+            
             let temp = data.main.temp;
             temperature.innerHTML = temp + "° F";
             location.innerHTML = data.name; 
             description.innerHTML = data.weather[0].main;
+
         })
         // console.log('position ', position);
         // console.log('latitude: ', latitude);
