@@ -52,7 +52,7 @@ const Login = (props) => {
 
     return(
         <div className="login-div">
-            {isSubmitted ? <div className="login-success"><h3>Successfully logged in!</h3><h3>Welcome {props.user}!</h3><Link to='/' id="enter-link">Click Here</Link></div> : renderForm}
+            {isSubmitted ? <div className="login-success"><h3>Successfully logged in!</h3><h3>Welcome {userProfile}!</h3><Link to='/' id="enter-link">Click Here</Link></div> : renderForm}
         </div>
     )
 }

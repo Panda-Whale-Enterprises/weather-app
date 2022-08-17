@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 require("dotenv").config();
 
+
 const connectToDB = () => {
   mongoose.connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0.txufs6f.mongodb.net/?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
@@ -10,6 +11,7 @@ const connectToDB = () => {
 })
     .then(() => console.log('Connected to Mongo DB.'))
     .catch(err => console.log(err));
+
 }
 
 // FIX: unique should be true in prod
@@ -31,6 +33,7 @@ const userSchema = new Schema({
   username: {type: String, required: true, unique: true},
   password: {type: String, required: true},
   favorites: {type: Object, required: false}
+
 });
 
 const User = mongoose.model('User', userSchema);
