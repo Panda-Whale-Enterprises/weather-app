@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const axios = require('axios');
 const coreJsCompat = require('@babel/preset-env/data/core-js-compat');
-const Controller = require('./controllers/controller');
+const controller = require('./controllers/controller');
 
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -39,8 +39,14 @@ app.use('/', router);
 
 // Get monthly weather data for a city
 // http://localhost:3000/search
-router.post('/search', Controller.getMonthlyData, Controller.getData, (req, res, next) => {
-    // sends info back in via middleware getData
+router.post('/search', 
+  controller.getData, 
+  controller.getCoordinates, 
+  controller.getStations, 
+  controller.getMonthlyData, 
+  controller.saveData,
+  (req, res, next) => {
+      res.status(200).send({cityName: res.locals.cityName, cityData: res.locals.cityData});
 });
 
 
@@ -73,9 +79,15 @@ app.use('*', (req, res) => {
 
 //Global Error Handler
 app.use((err, req, res, next) => {
-    console.log(err);
-    res.status(500).send({ error: err });
-});
+    const defaultErr = {
+      log: 'Express error handler caught unknown middleware error',
+      status: 500,
+      message: { err: 'An error occurred' },
+    };
+    const errorObj = Object.assign({}, defaultErr, err);
+    console.log(errorObj.log);
+    res.status(errorObj.status).json(errorObj.message.err);
+  });
 
 
 app.listen(PORT, () => {
