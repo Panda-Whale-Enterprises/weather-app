@@ -6,6 +6,7 @@ import Navbar from './Navbar.jsx';
 import Searchbar from './Searchbar.jsx';
 import Signup from './Signup.jsx';
 import Login from './Login.jsx';
+import LocalWeather from './LocalWeather.jsx';
 import { Routes, Route } from "react-router-dom";
 
 
@@ -18,6 +19,7 @@ const App = props => {
         <Route path="/" element={
           <main>
             <Navbar user={user} setUser={setUser} />
+            <LocalWeather />
             <Searchbar user={user} setUser={setUser} />
           </main>
         } />
