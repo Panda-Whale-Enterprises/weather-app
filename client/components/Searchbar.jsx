@@ -48,9 +48,9 @@ const Searchbar = props => {
       data: { city: inputCity }
     })
       .then(data => {
+        console.log('front end!!', data);
         setCityData(data.data.cityData);
         setCityName(data.data.cityName);
-        //console.log('front end!!', data.data);
         handleClicked();
       })
   }
