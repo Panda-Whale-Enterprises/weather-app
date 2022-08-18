@@ -1,8 +1,9 @@
 //server/userController.js
-const {User} = require('../model.js');
+const { User } = require('../model.js');
 const fs = require('fs');
 const userController = {};
 const bcrypt = require('bcrypt');
+require("dotenv").config();
 
 /**
  * getAllUsers - retrieve all users from the database and stores it into res.locals
@@ -27,22 +28,42 @@ userController.getAllUsers = (req, res, next) => {
  * createUser - create and save a new User into the database.
  */
 userController.createUser = (req, res, next) => {
-  // write code here
   const { username, password } = req.body;
-  if(!username || !password) return next('Missing username or password in userController.createUser');
 
-  const hash = bcrypt.hashSync(password, 10);
+  if(!username || !password){
+    return next({
+      log: 'Error in userController.createUser - no username and/or password.', 
+      message: {err: 'Error creating your account, invalid username and/or password.'}
+    });
+  } 
 
-  User.create({ username, password: hash }, (err, user) => {
-    if(err) {
-      return next({error: err});
-    }else{
-      console.log('createUser user._doc: ', user._doc)
-      res.locals.user = user._doc;
-      return next()
-    }
+  bcrypt.hash(password, Number(process.env.SALTROUNDS))
+  .then( hash => {
+    const newUser = new User({
+      username: username,
+      password: hash
+    })
+    return newUser
+  
   })
- 
+  .then( newUserData => {
+    //console.log(newUserData)
+    return newUserData.save()
+    // need to store user_id in locals
+  })
+  .then( data => {
+    //console.log(data)
+    //console.log('createUser object id: ', data._id.toString())
+    res.locals.userId = data._id.toString();
+    console.log(res.locals.userId)
+    return next()
+  })
+  .catch( err => 
+    next({
+    log: `Error in userController.createUser: ${err}`, 
+    message: {err: 'Error creating your account, see server log for details.'}
+  })
+ )
 };
 
 /**
@@ -51,39 +72,34 @@ userController.createUser = (req, res, next) => {
  * against the password stored in the database.
  */
 userController.verifyUser = (req, res, next) => {
-  // write code here
   const { username, password } = req.body;
-  // console.log('verify username: ',username);
-  // console.log('verify password: ',password);
-  //check against res.locals.users if username exists and password matches
-  if (!username || !password)
-    return next('Missing username or password in userController.verifyUser');
 
-  User.findOne({ username: username }, (err, user) => {
-    if (err) {
-      return next('Error in userController.verifyUser (first err): ' + JSON.stringify(err));
-    } else if (!user) {
-      console.log('verifyUser user does not exist');
-      // res.redirect('/signup');
-      res.locals.path='/signup';
-      return next();
-     
-    } else {
-      bcrypt.compare(password, user.password).then((result) => {
-        if (!result) {
-          // res.redirect('/login');
-          res.locals.path = '/login';
-          console.log('wrong password!');
-          return next()
-        } else {
-          res.locals.user = user;
-          res.locals.path = '/';
-          res.locals.loggedIn = true;
-          return next();
-        }
-      });
+  if (!username || !password)
+    return next({
+      log: 'Error in userController.verifyCookie - invalid username and/or password.', 
+      message: {err: 'Error with your account, invalid username and/or password.'}
+    });
+
+  User.findOne({ username })
+  .then( response => {
+    console.log('user lookup response: ', response)
+    if(!response) {
+      console.log('user does not exist')
+      // username does not exist
+      // redirect to /signup - localhost:8080/signup won't work?
+      res.redirect('https://localhost:8080/signup') // does not end req-res cycle and continues to next middleware
+      return next()
     }
+    res.locals.userId = response._id.toString();
+    // res.locals.path = '/';
+    // res.locals.loggedIn = true;
+    return next();
   })
+  .catch ( err => next({
+    log: `Error in userController.verifyUser: ${err}`,
+    message: {err: 'Error with your account, invalid username and/or password.'}
+  }))
+
 };
 
 module.exports = userController;
