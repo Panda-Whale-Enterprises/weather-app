@@ -57,8 +57,9 @@ const App = props => {
     return (
       <Routes>
         <Route path="/" element={
-          <main>
+          <main >
             <Navbar user={user} setUser={setUser} />
+            <div className='content-container'>
             <LocalWeather localInfo = {localInfo}/>
             {!currInfoLoading ?
               <Searchbar 
@@ -69,6 +70,7 @@ const App = props => {
                 setUser={setUser} /> :
               <div className="searchbar"><h3>Loading Location Info</h3></div>
             }
+            </div>
           </main>
         } />
         <Route path="/signup" element={<Signup user={user} setUser={setUser} />} />

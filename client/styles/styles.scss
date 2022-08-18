@@ -11,7 +11,7 @@ $sky-800: #075985;
 $sky-900: #0c4a6e;
 $zinc-50: #fafafa; 
 $zinc-100: #f4f4f5;
-$zinc-200: #e4e4e7;
+$zinc-200: #e4e4e7; 
 $zinc-300: #d4d4d8;
 $zinc-400: #a1a1aa;
 $zinc-500: #71717a;
@@ -38,6 +38,11 @@ body{
   padding: 0.5rem; 
 }
 
+.content-container{
+    display: flex;
+  
+}
+
 .searchbar-div{
     display:flex;
     flex-direction:column;
@@ -49,7 +54,7 @@ body{
 .localWeather{
     padding: 1rem;
     width: 10rem;
-    height: 10rem;
+    height: 100%;
     margin: 2rem;
     
     border:1px solid $zinc-600;
