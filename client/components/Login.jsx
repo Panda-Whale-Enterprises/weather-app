@@ -30,10 +30,10 @@ const Login = (props) => {
             data: { username, password }
         })
          .then((res) => {
-          
+            console.log(res.data)
             //navigate(`${res.data.path}`, {replace:true})
-            if(res.data.isLoggedIn){
-                setIsSubmitted(res.data.isLoggedIn)
+            if(res.data.loggedIn){
+                setIsSubmitted(res.data.loggedIn)
                 setWhoLogged(res.data.user.username);
                 props.setUser(res.data.user.username);
 
