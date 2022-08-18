@@ -29,13 +29,18 @@ controller.getData = (req, res, next) => {
 }
 
 controller.getCoordinates = (req, res, next) => {
-  const cityName = req.body.city;
-  res.locals.cityName = cityName;
+  if (!res.locals.cityName) {
+    return next({
+      log: 'Error in controller.getCoordinates - no city name.',
+      message: 'Query for coordinates unsuccessful, check server log for details.'
+    });
+  }
+  const cityName = res.locals.cityName;
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${cityName}&key=${process.env.GOOGLEAPIKEY}`;
     // Get coordinates from city name
   axios.get(url)
     .then(response => {
-      const coordinates = { lat: response.data.results[0].geometry.location.lat, lon: response.data.results[0].geometry.location.lng } // returns { lat: 51.5, lon: -0.127 }
+      const coordinates = { lat: response.data.results[0].geometry.location.lat, lon: response.data.results[0].geometry.location.lng } 
       res.locals.coordinates = coordinates;
       return next();
     })
@@ -94,7 +99,7 @@ controller.getMonthlyData = (req, res, next) => {
       units: 'imperial' 
     },
     headers: {
-      'X-RapidAPI-Key': '486cee67b7msh6fe5f060a910d1ap176ef4jsncf8e8f8d110e',
+      'X-RapidAPI-Key': 'aae7167eabmsha14de507765a006p19b50bjsn4c06e379b10e',
       'X-RapidAPI-Host': 'meteostat.p.rapidapi.com'
     }
   }
