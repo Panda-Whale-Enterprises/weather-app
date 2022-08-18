@@ -67,7 +67,7 @@ const App = props => {
                 setLocationToLoad={setLocationToLoad} 
                 user={user} 
                 setUser={setUser} /> :
-              <div><h3>Loading Location Info</h3></div>
+              <div className="searchbar"><h3>Loading Location Info</h3></div>
             }
           </main>
         } />
