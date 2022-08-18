@@ -60,7 +60,10 @@ router.post('/signup', userController.createUser, cookieController.setSSIDCookie
 
 //LOGIN routes
 router.post('/login', userController.verifyUser, cookieController.setSSIDCookie, (req, res, err) => {
-    // redirect to '/
+    if(res.locals.redirectSignup){
+        res.redirect('http://localhost:8080/signup')
+    }
+    // otherwise redirect to '/'
     console.log('app.post login sucessful')
     //res.send(res.locals);
     res.redirect('http://localhost:8080')// does not work

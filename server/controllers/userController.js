@@ -87,7 +87,8 @@ userController.verifyUser = (req, res, next) => {
       console.log('user does not exist')
       // username does not exist
       // redirect to /signup - localhost:8080/signup won't work?
-      res.redirect('https://localhost:8080/signup') // does not end req-res cycle and continues to next middleware
+      // res.redirect('http://localhost:8080/signup') // does not end req-res cycle and continues to next middleware
+      res.locals.redirectSignup = true;
       return next()
     }
     res.locals.userId = response._id.toString();
