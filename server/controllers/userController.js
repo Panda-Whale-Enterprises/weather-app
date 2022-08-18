@@ -78,7 +78,6 @@ userController.verifyUser = (req, res, next) => {
 
   User.findOne({ username })
   .then( response => {
-    console.log('user lookup response: ', response)
     if(!response) {
       console.log('user does not exist')
       return next({
@@ -86,9 +85,23 @@ userController.verifyUser = (req, res, next) => {
         message: {err: 'Error with your account, invalid username and/or password.'}
       })
     }
-    res.locals.userId = response._id.toString();
-    res.locals.isLoggedIn = true; // should redirect to homepage on the frontend
-    return next();
+      res.locals.userId = response._id.toString();
+      return response
+    })
+    .then(data => {
+    return bcrypt.compare(password, data.password)
+  })
+  .then( result => {
+    if(result === true){
+      res.locals.isLoggedIn = true; // should redirect to homepage on the frontend
+      return next();
+    }
+    else{
+      return next({
+        log: 'Error in userController.verifyCookie - invalid username and/or password.', 
+        message: {err: 'Error with your account, invalid username and/or password.'}
+      })
+    }
   })
   .catch ( err => next({
     log: `Error in userController.verifyUser: ${err}`,
