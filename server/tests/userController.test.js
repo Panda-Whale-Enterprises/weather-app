@@ -22,16 +22,17 @@ describe('User Controller', () => {
   })
 
   // Test for whether inserting user into database works
-  it('createUser', async done => {
+  it('createUser', async () => {
+
     // Create user in database
-    const { username } = await createUser({username, password});
+    await createUser({ body: {username: 'testuser' , password: 'testpass' }}, {locals: {}}, (err) => {console.log(err)});
 
     // Find user from database
-    const user = await User.find({username})
+    const user = await User.find({ username: 'testuser' });
+    const newUsername = user[0].username;
 
     // Testing whether user created in database
-    expect(user.username).toEqual(username);
-    done()
+    expect(newUsername).toEqual('testuser');
   })
 
 })
