@@ -47,15 +47,11 @@ userController.createUser = (req, res, next) => {
   
   })
   .then( newUserData => {
-    //console.log(newUserData)
     return newUserData.save()
-    // need to store user_id in locals
   })
   .then( data => {
-    //console.log(data)
-    //console.log('createUser object id: ', data._id.toString())
     res.locals.userId = data._id.toString();
-    console.log(res.locals.userId)
+    res.locals.isLoggedIn = true;
     return next()
   })
   .catch( err => 
@@ -85,15 +81,13 @@ userController.verifyUser = (req, res, next) => {
     console.log('user lookup response: ', response)
     if(!response) {
       console.log('user does not exist')
-      // username does not exist
-      // redirect to /signup - localhost:8080/signup won't work?
-      // res.redirect('http://localhost:8080/signup') // does not end req-res cycle and continues to next middleware
-      res.locals.redirectSignup = true;
-      return next()
+      return next({
+        log: `Error in userController.verifyUser: ${err}`,
+        message: {err: 'Error with your account, invalid username and/or password.'}
+      })
     }
     res.locals.userId = response._id.toString();
-    // res.locals.path = '/';
-    // res.locals.loggedIn = true;
+    res.locals.isLoggedIn = true; // should redirect to homepage on the frontend
     return next();
   })
   .catch ( err => next({

@@ -55,18 +55,13 @@ router.post('/search',
 //SIGNUP routes
 router.post('/signup', userController.createUser, cookieController.setSSIDCookie, (req, res, err) => {
     console.log('signup successful')
-    res.status(200).send(); // redirect is already handled on frontend, but cookie is not set
+    res.status(200).send(res.locals.isLoggedIn); // redirect is already handled on frontend
 })
 
 //LOGIN routes
 router.post('/login', userController.verifyUser, cookieController.setSSIDCookie, (req, res, err) => {
-    if(res.locals.redirectSignup){
-        res.redirect('http://localhost:8080/signup')
-    }
-    // otherwise redirect to '/'
-    console.log('app.post login sucessful')
-    //res.send(res.locals);
-    res.redirect('http://localhost:8080')// does not work
+    console.log('login successful')
+    res.status(200).send(res.locals.isLoggedIn); // frontend will handle redirect to homepage
 })
 
 //AUTHORIZED routes
