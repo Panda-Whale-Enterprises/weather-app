@@ -30,15 +30,20 @@ const Login = (props) => {
             data: { username, password }
         })
          .then((res) => {
-            console.log('Login.jsx .then res.data: ',res.data);
-            console.log('logged in?: ', res.data.loggedIn); // true
-            console.log('who logged in? ',res.data.user.username)
+          
             //navigate(`${res.data.path}`, {replace:true})
-            setIsSubmitted(res.data.loggedIn)
-            setWhoLogged(res.data.user.username);
-            props.setUser(res.data.user.username);
-            
-            res.data.loggedIn ? window.location.href = 'http://localhost:8080/' : (console.log('login failed'))
+            if(res.data.isLoggedIn){
+                setIsSubmitted(res.data.isLoggedIn)
+                setWhoLogged(res.data.user.username);
+                props.setUser(res.data.user.username);
+
+                window.location.href = 'http://localhost:8080/'
+            }
+
+            else{
+              
+            }
+          
         });
     }
 
@@ -48,7 +53,7 @@ const Login = (props) => {
         <input className="form-input" type="text" name="username" placeholder="Username"></input>
         <input className="form-input" type="password" name="password" placeholder="Password"></input>
         <input className = "submit-btn" type="submit" value="Login"></input>
-        <Link to="/signup">Don't have an account? Click here!</Link>
+        <Link to="/signup"> Don't have an account? Click here!</Link>
         </form>
     )
 
@@ -56,7 +61,7 @@ const Login = (props) => {
         <div className="login-div">
             {isSubmitted ? 
             <div className="login-success"><h3>Welcome {whoLogged}! </h3><h4>We're fetching your data</h4></div>
-            : renderForm}
+            : renderForm }
         </div>
     )
 }
