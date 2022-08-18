@@ -14,6 +14,7 @@ const App = props => {
 
   const [user, setUser] = useState(null);
   const [localInfo, setLocalInfo] = useState({});
+  const [currInfoLoading, setCurrInfoLoading] = useState(true);
 
 
   useEffect(()=>{
@@ -42,9 +43,9 @@ const App = props => {
              localInfo.weatherDescription = data.weather[0].main;
              localInfo.latitude = latitude
              localInfo.longitude = longitude
-  
-             
+
              setLocalInfo(localInfo)
+             setCurrInfoLoading(false);
           })
       }; 
   
@@ -65,7 +66,10 @@ const App = props => {
           <main>
             <Navbar user={user} setUser={setUser} />
             <LocalWeather localInfo = {localInfo}/>
-            <Searchbar localInfo = {localInfo} user={user} setUser={setUser} />
+            {!currInfoLoading ?
+              <Searchbar localInfo = {localInfo} user={user} setUser={setUser} /> :
+              <div><h3>Loading Location Info</h3></div>
+            }
           </main>
         } />
         <Route path="/signup" element={<Signup user={user} setUser={setUser} />} />
@@ -76,4 +80,5 @@ const App = props => {
 }
 
 export default App; 
+
 

@@ -28,7 +28,7 @@ const Searchbar = props => {
         setCityName(data.data.cityName);
         setLocationIsLoading(false)
       })
-  }, [props.localInfo.currentLocation]);
+  }, []);
 
   const handleSubmit = (e) => {
     //prevents the page from refreshing on submit
