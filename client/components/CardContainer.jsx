@@ -10,7 +10,6 @@ const CardContainer = (props) => {
             <div className='cardContainer'>
             <Card city={props.city} data={props.data}/>
             </div>
-
         </div>
     )
 }
