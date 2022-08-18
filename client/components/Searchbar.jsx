@@ -11,33 +11,24 @@ const Searchbar = props => {
   
   const [cityData, setCityData] = useState([]) // cityData = []
  
-  const [cityName, setCityName] = useState('') // cityName = 'Portland'
+  const [cityName, setCityName] = useState(props.localInfo.currentLocation) // cityName = 'Portland'
   const [locationIsLoading, setLocationIsLoading] = useState(true)
 
   //like componentDidMount triggers on change
   useEffect(() => {
-
-    const getCurrentLocation = () =>{
-      
-      
-      navigator.geolocation.getCurrentPosition(success, error)
-      
-
-    }
-
   
 
     axios({
       method: 'POST',
       url: 'http://localhost:3000/search',
-      data: { city: 'Denver' }
+      data: { city: props.localInfo.currentLocation }
     })
       .then(data => {
         setCityData(data.data.cityData);
         setCityName(data.data.cityName);
         setLocationIsLoading(false)
       })
-  }, []);
+  }, [props.localInfo.currentLocation]);
 
   const handleSubmit = (e) => {
     //prevents the page from refreshing on submit
