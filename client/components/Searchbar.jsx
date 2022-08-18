@@ -16,6 +16,17 @@ const Searchbar = props => {
 
   //like componentDidMount triggers on change
   useEffect(() => {
+
+    const getCurrentLocation = () =>{
+      
+      
+      navigator.geolocation.getCurrentPosition(success, error)
+      
+
+    }
+
+  
+
     axios({
       method: 'POST',
       url: 'http://localhost:3000/search',

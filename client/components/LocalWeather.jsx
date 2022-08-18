@@ -37,10 +37,10 @@ const getWeather = () => {
             description.innerHTML = data.weather[0].main;
 
         })
-        // console.log('position ', position);
-        // console.log('latitude: ', latitude);
-        // console.log('longitude: ', longitude); 
-        // console.log('url: ', url)
+        console.log('position ', position);
+        console.log('latitude: ', latitude);
+        console.log('longitude: ', longitude); 
+       
     }; 
 
     function error(){console.log('error finding location')}
