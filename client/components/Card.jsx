@@ -56,7 +56,7 @@ const Card = (props) => {
   return (
     <div className="card">
       <div className="card-header">
-        <h3>City Name: {cityName.toUpperCase()}</h3>
+        <h3>Location Name: {cityName.toUpperCase()}</h3>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

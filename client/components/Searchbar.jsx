@@ -68,13 +68,13 @@ const Searchbar = props => {
   return (
     <div className="searchbar-div">
       <form className="searchbar" onSubmit={handleSubmit}>
-        <input className="search-input" name="search-input" id="search-input" type="text" placeholder="London" required></input>
+        <input className="search-input" name="search-input" id="search-input" type="text" placeholder="Paris, France" required></input>
         <input className="search-btn" type="submit" value="Search"></input>
       </form>
       {
         !locationIsLoading && props.locationToLoad ? 
         <CardContainer city={cityName} data={cityData} /> : 
-        <div><h3>Enter city name above...</h3></div>
+        <div><h3>Enter a location above...</h3></div>
       }
       {
         error ?
