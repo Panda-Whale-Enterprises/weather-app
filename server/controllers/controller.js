@@ -4,6 +4,9 @@ const { Location } = require('../model.js')
 const controller = {};
 
 controller.getData = (req, res, next) => {
+  
+  console.log('getData: ', req.body.city)
+
   if (!req.body.city) {
     return next({
       log: 'Error in controller.getData - no city name.',
@@ -28,12 +31,19 @@ controller.getData = (req, res, next) => {
 }
 
 controller.getCoordinates = (req, res, next) => {
-  const cityName = req.body.city;
-  res.locals.cityName = cityName;
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${cityName}&key=AIzaSyBtfcxOznbnQFJHSdQTgsSZVRbvpOZNdKU`;
+  console.log('in getCoordinates: ', res.locals.cityName)
+  if (!res.locals.cityName) {
+    return next({
+      log: 'Error in controller.getCoordinates - no city name.',
+      message: 'Query for coordinates unsuccessful, check server log for details.'
+    });
+  }
+  const cityName = res.locals.cityName;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${cityName}&key=AIzaSyAehZ2pCL7V8b3cAfN3iBwZWEgfWWFIlJI`;
     // Get coordinates from city name
   axios.get(url)
     .then(response => {
+      console.log('latitude: ', response.data.results[0].geometry.location);
       const coordinates = { lat: response.data.results[0].geometry.location.lat, lon: response.data.results[0].geometry.location.lng } // returns { lat: 51.5, lon: -0.127 }
       res.locals.coordinates = coordinates;
       return next();

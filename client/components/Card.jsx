@@ -49,8 +49,8 @@ const Card = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("Card.jsx useEffect cityData: ", cityData);
-    console.log("Card.jsx useEffect cityName: ", cityName);
+    // console.log("Card.jsx useEffect cityData: ", cityData);
+    // console.log("Card.jsx useEffect cityName: ", cityName);
   }, [cityData, cityName]);
 
   return (
