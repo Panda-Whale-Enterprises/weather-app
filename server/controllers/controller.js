@@ -39,7 +39,7 @@ controller.getCoordinates = (req, res, next) => {
     // Get coordinates from city name
   axios.get(url)
     .then(response => {
-      const coordinates = { lat: response.data.results[0].geometry.location.lat, lon: response.data.results[0].geometry.location.lng } // returns { lat: 51.5, lon: -0.127 }
+      const coordinates = { lat: response.data.results[0].geometry.location.lat, lon: response.data.results[0].geometry.location.lng } 
       res.locals.coordinates = coordinates;
       return next();
     })
