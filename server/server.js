@@ -1,8 +1,8 @@
 //server/server.js
 const path = require('path');
 const express = require('express');
-const axios = require('axios');
-const coreJsCompat = require('@babel/preset-env/data/core-js-compat');
+//const axios = require('axios');
+//const coreJsCompat = require('@babel/preset-env/data/core-js-compat');
 
 // Connects to database
 require('./model').connectToDB();
@@ -10,12 +10,12 @@ require('./model').connectToDB();
 const controller = require('./controllers/controller');
 
 const cors = require('cors');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
+//const session = require('express-session');
 const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
-const sessionController = require('./controllers/sessionController');
+//const sessionController = require('./controllers/sessionController');
 
 const PORT = 3000;
 
@@ -54,15 +54,14 @@ router.post('/search',
 
 //SIGNUP routes
 router.post('/signup', userController.createUser, cookieController.setSSIDCookie, (req, res, err) => {
-    // send response back to front-end and do redirect at frontend
-    res.status(200).send();
+    console.log('signup successful')
+    res.status(200).send(res.locals.isLoggedIn); // redirect is already handled on frontend
 })
 
 //LOGIN routes
 router.post('/login', userController.verifyUser, cookieController.setSSIDCookie, (req, res, err) => {
-    // redirects happens in controllers
-    console.log('app.post login sucessful')
-    res.send(res.locals);
+    console.log('login successful')
+    res.status(200).send(res.locals.isLoggedIn); // frontend will handle redirect to homepage
 })
 
 //AUTHORIZED routes
