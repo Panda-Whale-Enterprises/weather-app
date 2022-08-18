@@ -37,6 +37,8 @@ const Login = (props) => {
             setIsSubmitted(res.data.loggedIn)
             setWhoLogged(res.data.user.username);
             props.setUser(res.data.user.username);
+            
+            res.data.loggedIn ? window.location.href = 'http://localhost:8080/' : (console.log('login failed'))
         });
     }
 
@@ -52,7 +54,9 @@ const Login = (props) => {
 
     return(
         <div className="login-div">
-            {isSubmitted ? <div className="login-success"><h3>Successfully logged in!</h3><h3>Welcome {userProfile}!</h3><Link to='/' id="enter-link">Click Here</Link></div> : renderForm}
+            {isSubmitted ? 
+            <div className="login-success"><h3>Welcome {whoLogged}! </h3><h4>We're fetching your data</h4></div>
+            : renderForm}
         </div>
     )
 }
