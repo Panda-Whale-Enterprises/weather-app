@@ -49,14 +49,14 @@ const Card = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("Card.jsx useEffect cityData: ", cityData);
-    console.log("Card.jsx useEffect cityName: ", cityName);
+    // console.log("Card.jsx useEffect cityData: ", cityData);
+    // console.log("Card.jsx useEffect cityName: ", cityName);
   }, [cityData, cityName]);
 
   return (
     <div className="card">
       <div className="card-header">
-        <h3>City Name: {cityName.toUpperCase()}</h3>
+        <h3>Location Name: {cityName.toUpperCase()}</h3>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

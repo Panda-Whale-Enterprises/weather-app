@@ -1,17 +1,21 @@
 //server/server.js
 const path = require('path');
 const express = require('express');
-const axios = require('axios');
-const coreJsCompat = require('@babel/preset-env/data/core-js-compat');
-const Controller = require('./controller');
-require("dotenv").config();
+//const axios = require('axios');
+//const coreJsCompat = require('@babel/preset-env/data/core-js-compat');
+
+// Connects to database
+require('./model').connectToDB();
+
+const controller = require('./controllers/controller');
+
 const cors = require('cors');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const userController = require('./userController');
-const cookieController = require('./cookieController');
-const sessionController = require('./sessionController');
+//const session = require('express-session');
+const userController = require('./controllers/userController');
+const cookieController = require('./controllers/cookieController');
+//const sessionController = require('./controllers/sessionController');
 
 const PORT = 3000;
 
@@ -20,15 +24,13 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-
-
-mongoose.connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0.txufs6f.mongodb.net/?retryWrites=true&w=majority`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: 'weatherApp'
-})
-    .then(() => console.log('Connected to Mongo DB.'))
-    .catch(err => console.log(err));
+// mongoose.connect(`mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@cluster0.txufs6f.mongodb.net/?retryWrites=true&w=majority`, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     dbName: 'weatherApp'
+// })
+//     .then(() => console.log('Connected to Mongo DB.'))
+//     .catch(err => console.log(err));
 
 app.get('/', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../index.html'))
@@ -39,22 +41,27 @@ app.use('/', router);
 
 // Get monthly weather data for a city
 // http://localhost:3000/search
-router.post('/search', Controller.getMonthlyData, Controller.getData, (req, res, next) => {
-    // sends info back in via middleware getData
+router.post('/search', 
+  controller.getData, 
+  controller.getCoordinates, 
+  controller.getStations, 
+  controller.getMonthlyData, 
+  controller.saveData,
+  (req, res, next) => {
+      res.status(200).send({cityName: res.locals.cityName, cityData: res.locals.cityData});
 });
 
 
 //SIGNUP routes
 router.post('/signup', userController.createUser, cookieController.setSSIDCookie, (req, res, err) => {
-    // send response back to front-end and do redirect at frontend
-    res.status(200).send();
+    console.log('signup successful')
+    res.status(200).send(res.locals.isLoggedIn); // redirect is already handled on frontend
 })
 
 //LOGIN routes
 router.post('/login', userController.verifyUser, cookieController.setSSIDCookie, (req, res, err) => {
-    // redirects happens in controllers
-    console.log('app.post login sucessful')
-    res.send(res.locals);
+    console.log('login successful')
+    res.status(200).send(res.locals.isLoggedIn); // frontend will handle redirect to homepage
 })
 
 //AUTHORIZED routes
@@ -73,9 +80,15 @@ app.use('*', (req, res) => {
 
 //Global Error Handler
 app.use((err, req, res, next) => {
-    console.log(err);
-    res.status(500).send({ error: err });
-});
+    const defaultErr = {
+      log: 'Express error handler caught unknown middleware error',
+      status: 500,
+      message: { err: 'An error occurred' },
+    };
+    const errorObj = Object.assign({}, defaultErr, err);
+    console.log(errorObj.log);
+    res.status(errorObj.status).json(errorObj.message.err);
+  });
 
 
 app.listen(PORT, () => {
